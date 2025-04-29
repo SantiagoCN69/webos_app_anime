@@ -1,0 +1,10 @@
+{
+    "id": "anime.flv.lite",
+    "version": "1.0.4",
+    "vendor": "Santiago Cardona",
+    "type": "web",
+    "main": "index.html",
+    "title": "Anime FLV Lite",
+    "icon": "icon.png",
+    "uiRevision": 2
+}
