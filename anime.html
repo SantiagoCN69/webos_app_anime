@@ -5,6 +5,13 @@
     <title>Anime Details</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <style>
+      /* Estilos adicionales para el enfoque visual */
+      .highlight {
+        background-color: rgba(0, 0, 255, 0.3); /* Color de fondo al enfocar */
+        border: 2px solid blue; /* Borde azul para resaltar */
+      }
+    </style>
 </head>
 <body>
   <div class="anime-details">
@@ -14,10 +21,11 @@
     </div>
     <div class="anime-container">
       <h1 id="titulo" class="anime-title"></h1>
+      <input type="number" id="filtro-capitulo" placeholder="Ir al capítulo" min="1" autofocus>
       <ul id="capitulos" class="episodes-list"></ul>
     </div>
   </div>
-<footer>Desarrollado por Santiago Cardona 😼</footer>
+  <footer>Desarrollado por Santiago Cardona 😼</footer>
   <script>
     const id = new URLSearchParams(location.search).get("id");
 
@@ -29,11 +37,18 @@
         document.getElementById("descripcion").textContent = anime.synopsis;
 
         const capContenedor = document.getElementById("capitulos");
+        const filtroCapitulo = document.getElementById("filtro-capitulo");
+
+        // Establecer foco en el input al cargar la página
+        filtroCapitulo.focus();
+        filtroCapitulo.classList.add("highlight");
+
         anime.episodes.forEach(ep => {
           const li = document.createElement("li");
           const btn = document.createElement("button");
           btn.className = "episode-btn";
           btn.textContent = `Episodio ${ep.number || ep.title || 'desconocido'}`;
+          btn.dataset.numero = ep.number || 0;
           btn.onclick = () => {
             fetch(`https://backend-animeflv-lite.onrender.com/api/episode?url=${encodeURIComponent(ep.url)}`)
               .then(res => res.json())
@@ -52,6 +67,58 @@
           };
           li.appendChild(btn);
           capContenedor.appendChild(li);
+        });
+
+        // Agregar evento de navegación por número de capítulo
+        filtroCapitulo.addEventListener('change', () => {
+          const numCapitulo = parseInt(filtroCapitulo.value);
+          const botones = capContenedor.querySelectorAll('.episode-btn');
+          const botonObjetivo = Array.from(botones).find(btn => parseInt(btn.dataset.numero) === numCapitulo);
+          
+          if (botonObjetivo) {
+            botonObjetivo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            botonObjetivo.classList.add('highlight');
+            setTimeout(() => botonObjetivo.classList.remove('highlight'), 2000);
+          } else {
+            alert(`Capítulo ${numCapitulo} no encontrado`);
+          }
+        });
+
+        // Manejar navegación con teclas de flecha
+        filtroCapitulo.addEventListener('keydown', (e) => {
+          const botones = capContenedor.querySelectorAll('.episode-btn');
+          const botonActual = document.querySelector('.episode-btn.highlight');
+          const indiceActual = botonActual ? Array.from(botones).indexOf(botonActual) : -1;
+
+          switch (e.key) {
+            case 'ArrowDown':
+              e.preventDefault();
+              if (indiceActual < botones.length - 1) {
+                if (botonActual) botonActual.classList.remove('highlight');
+                const siguienteBoton = botones[indiceActual + 1];
+                siguienteBoton.classList.add('highlight');
+                siguienteBoton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+              break;
+            case 'ArrowUp':
+              e.preventDefault();
+              if (indiceActual > 0) {
+                if (botonActual) botonActual.classList.remove('highlight');
+                const anteriorBoton = botones[indiceActual - 1];
+                anteriorBoton.classList.add('highlight');
+                anteriorBoton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              } else {
+                // Si estamos en el primer botón y presionamos 'ArrowUp', el foco va al input
+                filtroCapitulo.focus();
+                filtroCapitulo.classList.add('highlight');
+              }
+              break;
+            case 'Enter':
+              if (botonActual) {
+                botonActual.click();
+              }
+              break;
+          }
         });
       });
   </script>

@@ -1,67 +1,133 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.querySelector('.content-grid');
-    const items = Array.from(grid.querySelectorAll('.content-item'));
-    let currentIndex = 0;
+let currentIndex = 0; // Índice de la tarjeta de anime actual
+const columns = 6; // Número de columnas
 
-    // Asegurarse de que siempre haya 5 columnas
-    function ensureFiveColumns() {
-        const gridWidth = grid.clientWidth;
-        const itemWidth = items[0].clientWidth;
-        const columnsCount = Math.min(5, Math.max(1, Math.floor(gridWidth / (itemWidth + 20))));
-        grid.style.gridTemplateColumns = `repeat(${columnsCount}, 1fr)`;
+function actualizarFoco(animeCards) {
+  animeCards.forEach((card, i) => {
+    if (i === currentIndex) {
+      card.classList.add("focused");
+      card.focus(); // Si usas tabindex
+    } else {
+      card.classList.remove("focused");
+    }
+  });
+}
+
+document.addEventListener("keydown", (e) => {
+    const animeCards = document.querySelectorAll(".anime-card");
+    const busquedaInput = document.getElementById("busqueda");
+  
+    // Si el foco está en el input de búsqueda
+    if (document.activeElement === busquedaInput) {
+      switch (e.key) {
+        case "ArrowDown":
+          // Si presionas "ArrowDown" en el input de búsqueda, mover foco a la primera tarjeta de la primera fila
+          if (animeCards.length > 0) {
+            animeCards[0].focus();
+            currentIndex = 0; // Establecer el índice en la primera tarjeta
+          }
+          break;
+  
+        case "Enter":
+          // Si presionas "Enter" en el input de búsqueda, realizar la búsqueda
+          buscarAnime();
+          break;
+      }
+      return; // Si el foco está en el input, no hacer más acciones
+    }
+  
+    // Si el foco está en las tarjetas de anime
+    if (animeCards.length === 0) return;
+  
+    switch (e.key) {
+      case "ArrowRight":
+        if (currentIndex % columns !== columns - 1) { // Si no está en la última columna, mover a la derecha
+          currentIndex++;
+        }
+        break;
+  
+      case "ArrowLeft":
+        if (currentIndex % columns !== 0) { // Si no está en la primera columna, mover a la izquierda
+          currentIndex--;
+        }
+        break;
+  
+      case "ArrowDown":
+        if (currentIndex + columns < animeCards.length) { // Mover hacia abajo
+          currentIndex += columns;
+        }
+        break;
+  
+      case "ArrowUp":
+        if (currentIndex - columns >= 0) { // Mover hacia arriba
+          currentIndex -= columns;
+        } else if (currentIndex < columns) { // Si está en la primera fila, mover foco al input
+          busquedaInput.focus();
+        }
+        break;
+  
+      case "Enter":
+        // Si presionas "Enter" cuando una tarjeta está enfocada, hacer algo con la tarjeta
+        const btn = animeCards[currentIndex].querySelector("button");
+        if (btn) btn.click();
+        break;
+  
+      case "Tab":
+        // Si presionas "Tab", mover foco al input de búsqueda
+        busquedaInput.focus();
+        break;
+    }
+  
+    // Actualizar el enfoque en las tarjetas
+    actualizarFoco(animeCards);
+  });
+  
+
+function buscarAnime() {
+  const query = document.getElementById("busqueda").value;
+  if (!query) return;
+  fetch(`https://backend-animeflv-lite.onrender.com/api/search?q=${query}`)
+    .then((res) => res.json())
+    .then((res) => mostrarResultados(res.data));
+}
+
+function mostrarResultados(data) {
+  const contenedor = document.getElementById("main");
+  contenedor.innerHTML = "";
+
+  const resultados = data.data || data;
+
+  resultados.forEach((anime) => {
+    let animeId = "";
+    if (anime.url) {
+      const urlParts = anime.url.split("/");
+      const fullId = urlParts[urlParts.length - 1];
+      animeId = fullId.replace(/-\d+$/, "");
+    } else if (anime.id) {
+      animeId = anime.id.replace(/-\d+$/, "");
+    } else {
+      animeId = extraerIdDeLink(anime.link || "");
     }
 
-    // Función para manejar la navegación
-    function navigateGrid(direction) {
-        // Quitar foco del elemento actual
-        if (items[currentIndex]) {
-            items[currentIndex].classList.remove('focused');
-        }
+    const btnHtml = animeId
+      ? `<button onclick="ver('${animeId}')">Ver</button>`
+      : `<button disabled>No disponible</button>`;
 
-        // Calcular nuevo índice según la dirección
-        switch(direction) {
-            case 'ArrowRight':
-                currentIndex = (currentIndex + 1) % items.length;
-                break;
-            case 'ArrowLeft':
-                currentIndex = (currentIndex - 1 + items.length) % items.length;
-                break;
-            case 'ArrowDown':
-                currentIndex = Math.min(currentIndex + 5, items.length - 1);
-                break;
-            case 'ArrowUp':
-                currentIndex = Math.max(currentIndex - 5, 0);
-                break;
-        }
+    const div = document.createElement("div");
+    div.className = "anime-card content-item";
+    div.innerHTML = `
+      <img src="${anime.cover || anime.image || anime.poster || ""}" alt="${anime.title || anime.name}">
+      <strong>${anime.title || anime.name}</strong>
+      ${btnHtml}`;
+    contenedor.appendChild(div);
+  });
+}
 
-        // Añadir foco al nuevo elemento
-        items[currentIndex].classList.add('focused');
-        items[currentIndex].focus();
-        items[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+function extraerIdDeLink(link) {
+  if (!link) return "";
+  const partes = link.split("/");
+  return partes[partes.length - 1] || "";
+}
 
-    // Evento para manejar teclas del control remoto
-    document.addEventListener('keydown', (event) => {
-        if (['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
-            event.preventDefault();
-            navigateGrid(event.key);
-        }
-    });
-
-    // Añadir tabindex para hacer elementos navegables
-    items.forEach((item, index) => {
-        item.setAttribute('tabindex', '0');
-        item.addEventListener('focus', () => {
-            currentIndex = index;
-        });
-    });
-
-    // Asegurar 5 columnas al cargar y al redimensionar
-    ensureFiveColumns();
-    window.addEventListener('resize', ensureFiveColumns);
-
-    // Seleccionar primer elemento por defecto
-    if (items.length > 0) {
-        items[0].classList.add('focused');
-    }
-});
+function ver(id) {
+  location.href = `anime.html?id=${id}`;
+}

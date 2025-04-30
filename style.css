@@ -77,7 +77,7 @@ body {
 h1 {
     text-align: center;
     color: var(--primary-color);
-    padding: 2rem;
+    padding: 3rem;
     font-size: 3rem;
 }
 
@@ -106,9 +106,8 @@ h1 {
     box-shadow: 0px 0px 8px #ff5656;
 }
 #main {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 25px;
+    display: flex;
+    flex-wrap: wrap;
     flex-grow: 1;
     margin: 1rem auto;
     width: 100%;
@@ -120,21 +119,33 @@ h1 {
     border-radius: 12px;
     box-shadow: 0 6px 10px rgba(0,0,0,0.5);
     padding: 15px;
+    margin: 10px 5px;
     text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.2s;
     cursor: pointer;
     outline: none;
     max-width: 200px;
+    flex: 1 1 190px;
 }
 @media screen and (hover:hover) {
     .anime-card:hover {
-        transform: scale(1.05);
+        transform: scale(1.03);
         box-shadow: 0 8px 15px rgba(0,0,0,0.6);
+    }
+    .anime-card:hover button, .anime-card button.hover {
+        transform: scale(1.05);
+        background-color: #ff5656;
+        color: white;
     }
     .anime-card button:hover {
         transform: scale(1.03);
     }
 }
+
+.anime-card.focused {
+    box-shadow: 0px 0px 10px 5px #ff5656;
+}
+
 .anime-card img {
     max-width: 100%;
     height: 250px;
@@ -148,8 +159,7 @@ h1 {
 }
 strong {
     color: #fff;
-    min-height: 2.2rem;
-    max-height: 2.2rem;
+    height: 2.4rem;
     display: block;
     margin: .8rem;
     overflow: hidden;
@@ -176,7 +186,6 @@ strong {
 .anime-details {
     display: flex;
     align-items: start;
-    gap: 30px;
     max-width: 1000px;
     max-height: 700px;
     margin: 2rem auto;
@@ -187,6 +196,7 @@ strong {
 }
 
 .anime-container {
+    margin: 20px;
     flex: 1;
     display: flex;
     padding: 1.5rem;
@@ -194,6 +204,7 @@ strong {
     align-items: center;
     background-color: #1f1f33;
     border-radius: 10px;
+    min-height: 600px;
 }
 .anime-container img {
     border-radius: 10px;
@@ -201,16 +212,15 @@ strong {
     object-fit: cover;
     height: auto;
     width: 100%;
-    max-height: 140px;
+    max-height: 350px;
 }
 .anime-description {
     line-height: 1.6;
     color: #ffffff;
     margin: 15px auto;
     text-align: justify;
-    height: 22rem;
-    overflow: scroll;
-    scrollbar-width: none;
+    height: 203px;
+    overflow-y: hidden;
 }
 .anime-info {
     flex: 1;
@@ -230,30 +240,50 @@ strong {
 
 
 
-
+#filtro-capitulo {
+    width: 100%;
+    padding: 7px;
+    margin: 0 auto 2rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 12px;
+    background-color: var(--background-medium);
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+#filtro-capitulo:focus {
+    outline: none;
+    box-shadow: 0px 0px 8px #ff5656;
+}
 .episodes-list {
     margin: 15px auto;
     list-style-type: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
     justify-items: center;
     align-items: center;
-    gap: 15px;
-    height: 22rem;
+    width: 100%;
+    max-height: 350px;
     overflow-y: auto;
+    overflow-x: hidden;
+}
+.episodes-list li {
     width: 100%;
 }
-
 .episode-btn {
-    background-color: #ff5656;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    min-width: 100PX;
-    cursor: pointer;
-    transition:transform 0.2s;
+  background-color: transparent;
+  border:none;
+  border-top: 1px solid #fa7171;
+  color: #ffffff;
+  font-size: 1.2rem;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: transform 0.2s;
+  width: 100%;
+  
 }
 @media screen and (hover:hover) {
 .episode-btn:hover {
@@ -324,6 +354,6 @@ footer {
 
 .reproductor-container #video iframe {
     width: 100%;
-    height: 70vh;
+    height: 75vh;
     border-radius: 10px;
 }
