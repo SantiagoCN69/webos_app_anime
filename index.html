@@ -4,20 +4,8 @@
     <meta charset="UTF-8">
     <title>AnimeFLV Lite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AnimeFLV Lite: El repositorio más completo de anime en un solo lugar. Disfruta de miles de series y películas sin anuncios ni molestias.">
-    <meta name="keywords" content="anime, series anime, películas anime, streaming anime, AnimeFLV">
-    <meta name="author" content="Santiago Cardona">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="AnimeFLV Lite - Tu Repositorio de Anime">
-    <meta property="og:description" content="Disfruta de miles de series y películas de anime sin interrupciones.">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AnimeFLV Lite">
-    <meta name="twitter:description" content="El mejor repositorio de anime sin anuncios.">
-    <link rel="canonical" href="https://tudominio.com/index.html">
     <link rel="icon" type="image/png" href="/icons/icon.png">
     <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon.png">
-    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="styles/style.css">
     <script type="module" src="scripts/index.js" defer></script>
     <script type="module" src="scripts/header.js" defer></script>
@@ -54,6 +42,14 @@
             </div>
           </div>
         </section>
+        <section id="login-section" class="content-section hidden">
+          <h2>Iniciar Sesión</h2>
+          <p class="login-message">Ingresa tu correo electrónico para recibir un enlace de inicio de sesión.</p>
+          <input type="email" id="email-input" placeholder="Tu correo electrónico">
+          <button id="btn-send-link">Enviar enlace</button>
+          <p id="login-message"></p> <!-- Para mensajes como 'Revisa tu correo' o errores -->
+        </section>
+
         <section id="Busqueda-Resultados" class="content-section hidden">
           <h2>Resultados de la búsqueda</h2>
           <div id="resultados-busqueda" class="grid-animes"></div>
@@ -90,5 +86,7 @@
           <span class="init-loading-servidores">Iniciando servidores...<span class="contador"></span></span>
         </section>
       </main>
+
+      <script type="module" src="scripts/five-way-navigation.js" defer></script>
 </body>
 </html>

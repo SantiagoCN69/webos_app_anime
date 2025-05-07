@@ -392,6 +392,56 @@ main {
   font-size: 1.5rem;
   padding-bottom: 0.5rem;
 }
+#login-section {
+padding: 2rem;
+}
+
+.login-message {
+    color: #cccccc;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+#email-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #1c1c2b;
+    color: #ffffff;
+    font-size: 1rem;
+}
+#email-input:focus {
+    outline: none;
+}
+#email-input::placeholder {
+    color: #888;
+}
+
+#btn-send-link {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.8rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#btn-send-link:hover {
+    background-color: #0056b3;
+}
+
+#login-message {
+    margin-top: 0rem;
+    color: #ffffff; 
+    font-weight: bold;
+}
+
 /* Estilos para el bloque "Continuar viendo" */
 .sidebar h3 {
   margin-top: 2rem;
@@ -637,4 +687,11 @@ footer {
 }
 #cancel-logout:hover {
   background-color: #000e;
+}
+.focused {
+  outline: 3px solid #007bff; /* Un borde azul brillante */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.7); /* Un ligero resplandor */
+  /* ¡Asegúrate de que este estilo sea bien visible en tu tema oscuro! */
+  /* Considera también transiciones suaves si lo deseas */
+  transition: outline 0.1s ease-out, box-shadow 0.1s ease-out;
 }

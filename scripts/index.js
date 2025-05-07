@@ -305,7 +305,7 @@ async function cargarUltimosCapsVistos() {
     const rating = anime.rating || '';
   
     const div = document.createElement('div');
-    div.className = 'anime-card';
+    div.className = 'anime-card navigable';
     div.style.setProperty('--cover', `url(${cover})`);
     let chapterHtml = ''; 
     if (chapter) {
