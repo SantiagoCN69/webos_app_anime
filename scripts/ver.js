@@ -44,7 +44,26 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCensura.classList.toggle("activo", censuraActiva);
         btnCensura.textContent = `Censura: ${censuraActiva ? "ON" : "OFF"}`;
         document.querySelector(".reproductor-container").classList.toggle("censure", censuraActiva);
-    } 
+    }
+
+    // Funcionalidad de Pantalla Completa
+    const fullscreenButton = document.getElementById('fullscreen');
+    const videoContainer = document.getElementById('video');
+
+    if (fullscreenButton && videoContainer) {
+        fullscreenButton.addEventListener('click', () => {
+            const iframe = videoContainer.querySelector('iframe');
+            if (iframe) {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen().catch(err => console.error(`Error al salir de pantalla completa: ${err.message}`));
+                } else {
+                    iframe.requestFullscreen().catch(err => console.error(`Error al entrar en pantalla completa: ${err.message}`));
+                }
+            } else {
+                console.warn('No se encontró iframe en #video para poner en pantalla completa.');
+            }
+        });
+    }
 });
 
 btnBloquear.addEventListener("click", () => {
@@ -362,6 +381,13 @@ const yourUploadIndex = embeds.findIndex(link => link && typeof link.url === "st
 
   if (initialIndex !== -1) {
     const buttons = controles.querySelectorAll("button");
+    // Despachar evento si se crearon botones de control
+    if (buttons.length > 0) {
+        const event = new CustomEvent('controlesVideoListos');
+        document.dispatchEvent(event);
+        console.log('[ver.js] Evento controlesVideoListos despachado (restaurado).');
+    }
+
     if (buttons.length > initialIndex) {
       mostrarVideo(embeds[initialIndex], buttons[initialIndex]);
     } else {

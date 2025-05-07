@@ -51,7 +51,7 @@ h2 {
 
   .anime-details {
     display: grid;
-    grid-template-columns: 28% 1fr;
+    grid-template-columns: 1fr 3fr;
     grid-template-rows: 1fr 3fr;
     grid-template-areas: 
     "container1 container2"
@@ -75,8 +75,7 @@ h2 {
     background-color: #1c1c2b;
     border-radius: 5px;
     padding: .6rem;
-    max-height: fit-content;
-    justify-content: space-between;
+    height: fit-content;
     grid-area: container1;
     position: relative;
   }

@@ -239,7 +239,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'Enter':
             case 'NumpadEnter': // Para algunos webOS remote
-                if (currentElement) currentElement.click();
+                if (currentElement) {
+                    if (currentElement.id === 'busqueda' && currentElement.tagName === 'INPUT') {
+                        currentElement.focus(); // Asegura que el teclado aparezca para el input de búsqueda
+                    }
+                    currentElement.click(); // Ejecuta el click para otros comportamientos asociados
+                }
                 break;
             default:
                 return; // No hacer nada para otras teclas

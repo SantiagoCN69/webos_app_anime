@@ -124,6 +124,10 @@ async function crearBotonesEpisodios(anime) {
   if (primerNoVisto) {
     primerNoVisto.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
+
+  // Notificar que los episodios están listos para la navegación
+  console.log('[anime.js] Episodios cargados y añadidos al DOM. Disparando evento episodiosListosParaNavegacion.');
+  document.dispatchEvent(new CustomEvent('episodiosListosParaNavegacion'));
 }
 
 capContenedor.addEventListener('wheel', e => {

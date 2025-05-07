@@ -689,9 +689,14 @@ footer {
   background-color: #000e;
 }
 .focused {
-  outline: 3px solid #007bff; /* Un borde azul brillante */
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.7); /* Un ligero resplandor */
-  /* ¡Asegúrate de que este estilo sea bien visible en tu tema oscuro! */
-  /* Considera también transiciones suaves si lo deseas */
+  outline: 3px solid #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.7);
   transition: outline 0.1s ease-out, box-shadow 0.1s ease-out;
+}
+button.focused {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.7);
+  border: 2px solid #007bff;
+  outline: none;
+  color: #007bff;
+  background-color: #007bff13;
 }
