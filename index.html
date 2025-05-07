@@ -1,169 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta
-      name="description"
-      content="AnimeFLV Lite: El repositorio más completo de anime en un solo lugar. Disfruta de miles de series y películas sin anuncios ni molestias."
-    />
-    <meta
-      name="keywords"
-      content="anime, series anime, películas anime, streaming anime, AnimeFLV"
-    />
-    <meta name="author" content="Santiago Cardona" />
-    <meta name="robots" content="index, follow" />
-    <meta
-      property="og:title"
-      content="AnimeFLV Lite - Tu Repositorio de Anime"
-    />
-    <meta
-      property="og:description"
-      content="Disfruta de miles de series y películas de anime sin interrupciones."
-    />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="AnimeFLV Lite" />
-    <meta
-      name="twitter:description"
-      content="El mejor repositorio de anime sin anuncios."
-    />
-    <link rel="canonical" href="https://tudominio.com/index.html" />
-    <link rel="apple-touch-icon" sizes="256x256" href="icon.png" />
-    <link rel="manifest" href="/manifest.json" />
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
     <title>AnimeFLV Lite</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1>AnimeFLV Lite</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AnimeFLV Lite: El repositorio más completo de anime en un solo lugar. Disfruta de miles de series y películas sin anuncios ni molestias.">
+    <meta name="keywords" content="anime, series anime, películas anime, streaming anime, AnimeFLV">
+    <meta name="author" content="Santiago Cardona">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="AnimeFLV Lite - Tu Repositorio de Anime">
+    <meta property="og:description" content="Disfruta de miles de series y películas de anime sin interrupciones.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AnimeFLV Lite">
+    <meta name="twitter:description" content="El mejor repositorio de anime sin anuncios.">
+    <link rel="canonical" href="https://tudominio.com/index.html">
+    <link rel="icon" type="image/png" href="/icons/icon.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="styles/style.css">
+    <script type="module" src="scripts/index.js" defer></script>
+    <script type="module" src="scripts/header.js" defer></script>
+    <script type="module" src="scripts/firebase-login.js" defer></script>
+</head>
+<body>
+    <div class="aurora"></div>
 
-    <div class="search-container">
-      <input type="text" id="busqueda" placeholder="Buscar anime..." autofocus />
-    </div>
+    <header>
+        <a href="index.html" class="title"><h1>AnimeFLV Lite</h1></a>
+        <div class="search">
+            <input type="text" id="busqueda" placeholder="Buscar anime...">
+            <button id="btn-close-search" title="Cerrar búsqueda"></button>
+        </div>
+        <button type="button" id="btn-login" title="Iniciar sesión"></button>
+        <button type="button" id="btn-search" title="Buscar anime"></button>
+        <button type="button" id="menu-toggle" title="Menú"></button>
 
-    <div id="main"></div>
-    <footer>Desarrollado por Santiago Cardona 😼</footer>
-    <script src="tv-navigation.js"></script>
-    <script>
-      // Cargar últimos capítulos al iniciar
-      fetch("https://backend-animeflv-lite.onrender.com/api/latest")
-        .then((res) => res.json())
-        .then(mostrarResultados);
+    </header>
 
-      // Función para normalizar texto (remover tildes y convertir a minúsculas)
-      function normalizarTexto(texto) {
-        return texto.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-      }
-
-      // Función de búsqueda en tiempo real
-      const busquedaInput = document.getElementById("busqueda");
-      let busquedaTimer;
-
-      busquedaInput.addEventListener("input", function () {
-        // Limpiar el timer anterior
-        clearTimeout(busquedaTimer);
-
-        // Si el input está vacío, mostrar últimos capítulos
-        if (!this.value) {
-          fetch("https://backend-animeflv-lite.onrender.com/api/latest")
-            .then((res) => res.json())
-            .then(mostrarResultados);
-          return;
-        }
-
-        // Nuevo timer para búsqueda en tiempo real
-        busquedaTimer = setTimeout(() => {
-          const queryNormalizada = normalizarTexto(this.value);
-          fetch(
-            `https://backend-animeflv-lite.onrender.com/api/search?q=${this.value}`
-          )
-            .then((res) => res.json())
-            .then((res) => {
-              // Filtrar resultados sin tildes
-              const resultadosFiltrados = res.data.filter((anime) =>
-                normalizarTexto(anime.title).includes(queryNormalizada)
-              );
-              mostrarResultados(resultadosFiltrados);
-            });
-        }, 300); // 300ms de retraso para evitar muchas solicitudes
-      });
-
-      // Manejar navegación con teclas de flecha
-      busquedaInput.addEventListener('keydown', (e) => {
-        const animeCards = document.querySelectorAll('.anime-card');
+    <main>
+        <section class="sidebar">
+          <ul>
+            <li data-target="Ultimos-Episodios">Últimos Episodios</li>
+            <li data-target="Mis-Favoritos">Mis Favoritos</li>
+            <li data-target="Viendo">Viendo</li>
+            <li data-target="Pendientes">Pendientes</li>
+            <li data-target="Completados">Completados</li>
+          </ul>
+          <div class="continuar-viendo">
+            <h3>Continuar viendo</h3>
+            <div id="ultimos-caps-viendo">
+                <!-- se agregan los ultimos caps viendo -->
+            </div>
+          </div>
+        </section>
+        <section id="Busqueda-Resultados" class="content-section hidden">
+          <h2>Resultados de la búsqueda</h2>
+          <div id="resultados-busqueda" class="grid-animes"></div>
+          <span id="init-loading-servidores-busqueda">Iniciando servidores...<span id="contador-busqueda"></span></span>
+        </section>
         
-        switch (e.key) {
-          case 'ArrowDown':
-            e.preventDefault();
-            if (animeCards.length > 0) {
-              busquedaInput.blur();
-              animeCards[0].focus();
-              animeCards[0].classList.add('focused');
-            }
-            break;
-          case 'Enter':
-            buscarAnime();
-            break;
-        }
-      });
-
-      // Función de búsqueda manual (por si acaso)
-      function buscarAnime() {
-        const query = document.getElementById("busqueda").value;
-        if (!query) return;
-        fetch(
-          `https://backend-animeflv-lite.onrender.com/api/search?q=${query}`
-        )
-          .then((res) => res.json())
-          .then((res) => mostrarResultados(res.data));
-      }
-
-      // Mostrar resultados (últimos o búsqueda)
-      function mostrarResultados(data) {
-        const contenedor = document.getElementById("main");
-        contenedor.innerHTML = "";
-
-        const resultados = data.data || data;
-
-        resultados.forEach((anime) => {
-          let animeId = "";
-          if (anime.url) {
-            const urlParts = anime.url.split("/");
-            const fullId = urlParts[urlParts.length - 1];
-            animeId = fullId.replace(/-\d+$/, "");
-          } else if (anime.id) {
-            animeId = anime.id.replace(/-\d+$/, "");
-          } else {
-            animeId = extraerIdDeLink(anime.link || "");
-          }
-
-          const btnHtml = animeId
-            ? `<button onclick="ver('${animeId}')">Ver</button>`
-            : `<button disabled>No disponible</button>`;
-
-          const div = document.createElement("div");
-          div.className = "anime-card content-item";
-          div.setAttribute("tabindex", "0");
-          div.innerHTML = `
-          <img src="${anime.cover || anime.image || anime.poster || ""}" alt="${
-            anime.title || anime.name 
-          }">
-          <strong>${anime.title || anime.name}</strong>
-          ${btnHtml}`;
-          contenedor.appendChild(div);
-        });
-      }
-
-      // Extrae el id de un link tipo '/anime/dragon-ball-z' => 'dragon-ball-z'
-      function extraerIdDeLink(link) {
-        if (!link) return "";
-        const partes = link.split("/");
-        return partes[partes.length - 1] || "";
-      }
-
-      function ver(id) {
-        location.href = `anime.html?id=${id}`;
-      }
-    </script>
-  </body>
+        <section id="Ultimos-Episodios" class="content-section">
+          <h2>Últimos Episodios</h2>
+          <div id="ultimos-episodios" class="grid-animes"></div>
+          <span class="init-loading-servidores">Iniciando servidores...<span class="contador"></span></span>
+        </section>
+      
+        <section id="Mis-Favoritos" class="content-section hidden">
+          <h2>Mis Favoritos</h2>
+          <div id="favs" class="grid-animes"></div>
+          <span class="init-loading-servidores">Iniciando servidores...<span class="contador"></span></span>
+        </section>
+      
+        <section id="Viendo" class="content-section hidden">
+          <h2>Viendo</h2>
+          <div id="viendo" class="grid-animes"></div>
+          <span class="init-loading-servidores">Iniciando servidores...<span class="contador"></span></span>
+        </section>
+      
+        <section id="Pendientes" class="content-section hidden">
+          <h2>Pendientes</h2>
+          <div id="pendientes" class="grid-animes"></div>
+          <span class="init-loading-servidores">Iniciando servidores...<span class="contador"></span></span>
+        </section>
+      
+        <section id="Completados" class="content-section hidden">
+          <h2>Completados</h2>
+          <div id="completados" class="grid-animes"></div>
+          <span class="init-loading-servidores">Iniciando servidores...<span class="contador"></span></span>
+        </section>
+      </main>
+</body>
 </html>

@@ -16,8 +16,8 @@ document.addEventListener("keydown", (e) => {
     const animeCards = document.querySelectorAll(".anime-card");
     const busquedaInput = document.getElementById("busqueda");
   
-    // Si el foco está en el input de búsqueda
-    if (document.activeElement === busquedaInput) {
+    // Si el foco está en el input de búsqueda o currentIndex es -1
+    if (document.activeElement === busquedaInput || currentIndex === -1) {
       switch (e.key) {
         case "ArrowDown":
           // Si presionas "ArrowDown" en el input de búsqueda, mover foco a la primera tarjeta de la primera fila
@@ -30,6 +30,11 @@ document.addEventListener("keydown", (e) => {
         case "Enter":
           // Si presionas "Enter" en el input de búsqueda, realizar la búsqueda
           buscarAnime();
+          break;
+
+        case "ArrowUp":
+          // Si estás en el input y presionas ArrowUp, mantente en el input
+          busquedaInput.focus();
           break;
       }
       return; // Si el foco está en el input, no hacer más acciones
@@ -60,8 +65,9 @@ document.addEventListener("keydown", (e) => {
       case "ArrowUp":
         if (currentIndex - columns >= 0) { // Mover hacia arriba
           currentIndex -= columns;
-        } else if (currentIndex < columns) { // Si está en la primera fila, mover foco al input
+        } else if (currentIndex < columns) { // Si está en la primera fila
           busquedaInput.focus();
+          currentIndex = -1; // Resetear índice para indicar que estamos en el input
         }
         break;
   

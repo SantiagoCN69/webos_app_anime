@@ -1,3 +1,6 @@
-/anime.flv.lite_1.0.1_all.ipk
-/anime.flv.lite_1.0.3_all.ipk
-/anime.flv.lite_1.0.4_all.ipk
+node_modules/
+.DS_Store
+*.log
+.env
+/google2d6cb3683403b733.html
+/scripts/firebaseconfig.js

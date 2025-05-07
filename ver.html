@@ -1,60 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Reproductor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Reproductor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="icons/icon.png" />
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="styles/style_ver.css" />
+  <script src="scripts/header.js" defer></script>
 </head>
 <body>
-  <div class="reproductor-container">
-    <div id="video"></div>
-    <div id="controles"></div>
-  </div>
-  <footer>Desarrollado por Santiago Cardona 😼</footer>
-  <script>
-    // Obtener links de embed directamente del parámetro de la URL (esperando que sea un JSON codificado en base64)
-    const params = new URLSearchParams(location.search);
-    let embeds = params.get('embeds');
-    if (!embeds) {
-      document.getElementById('video').innerHTML = 'No se encontraron enlaces de video.';
-      throw new Error('Faltan los enlaces de video');
-    }
-    try {
-      embeds = JSON.parse(atob(embeds));
-    } catch (e) {
-      document.getElementById('video').innerHTML = 'Enlaces de video inválidos.';
-      throw new Error('Formato de enlaces inválido');
-    }
-    if (!Array.isArray(embeds) || embeds.length === 0) {
-      document.getElementById('video').innerHTML = 'No se encontraron enlaces de video.';
-      throw new Error('Array de enlaces vacío');
-    }
+  <header>
+    <a href="index.html" class="title"><h2>AnimeFLV Lite</h2></a>
+    <div class="search">
+        <input type="text" id="busqueda" placeholder="Buscar anime...">
+        <button id="btn-close-search" title="Cerrar búsqueda"></button>
+    </div>
+    <button id="btn-login" title="Iniciar sesión"></button>
+    <button id="btn-search" title="Buscar anime"></button>
+</header>
+<div id="main"></div>
 
-    // Mostrar el primer embed por defecto
-    mostrarVideo(embeds[0]);
+<main>
+  <section>
+    <a title="Volver al anime" href="#" id="btn-volver-anime" class="btn-volver"><span id="titulo-anime"></span></a>
+    <div class="contenedor-btn-cap">
+      <span id="btn-cap" class="btn-cap">Episodio</span>
+      <button type="button" id="btn-estado-capitulo" title="Marcar capítulo como visto">
+        <span id="texto-estado-capitulo" class="texto-estado-capitulo">No visto</span>
+      </button>
+    </div>
+    
+    <div class="reproductor-container">
+      <div id="controles"></div>
+      <span id="fullscreen" title="Pantalla completa"><img src="icons/play-solid.svg" alt="play"></span>
+      <div id="video"></div>
+    </div>
+   </section>
 
-    // Mostrar botones para cambiar de servidor
-    let botones = '';
-    embeds.forEach((srv, idx) => {
-      botones += `<button onclick="mostrarVideo('${srv}')">Servidor ${idx + 1}</button> `;
-    });
-    document.getElementById('controles').innerHTML = botones;
-
-    function mostrarVideo(link) {
-      document.getElementById('video').innerHTML = '';
-      const iframe = document.createElement('iframe');
-      iframe.src = link;
-      iframe.width = '100%';
-      iframe.height = '100%';
-      iframe.frameBorder = '0';
-      iframe.allowFullscreen = true;
-      iframe.scrolling = 'no';
-      
-      // Bloquear anuncios
-
-      document.getElementById('video').appendChild(iframe);
-    }
-  </script>
+   <section class="botones-reproductor">
+     <button id="btn-bloquear-anuncios" class="btn-anuncios">AdBlock: ON</button>
+     <button id="btn-censura" class="btn-censura">Censura: OFF</button>
+    <a href="#" id="btn-anterior-capitulo" class="btn-anterior">&#10094;</a>
+    <a href="#" id="btn-siguiente-capitulo" class="btn-siguiente">&#10095;</a>
+  </section>
+</main>
+  <script type="module" src="scripts/ver.js" defer></script>
+  <script type="module" src="scripts/firebase-login.js" defer></script>
 </body>
 </html>
