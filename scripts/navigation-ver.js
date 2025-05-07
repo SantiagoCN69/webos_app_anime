@@ -135,8 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     targetElement = serverButtons[currentIndexInServers - 1];
                 }
             }
-            // Nueva regla: Desde btn-anterior-capitulo o btn-siguiente-capitulo a fullscreen con ArrowLeft
-            else if ((currentElement === prevEpButton || currentElement === nextEpButton) && focusableElements.includes(fsButton)) {
+            // Nueva regla: Desde btn-siguiente-capitulo a btn-anterior-capitulo con ArrowLeft
+            else if (currentElement === nextEpButton && focusableElements.includes(prevEpButton)) {
+                targetElement = prevEpButton;
+            }
+            // Regla modificada: Desde btn-anterior-capitulo a fullscreen con ArrowLeft
+            else if (currentElement === prevEpButton && focusableElements.includes(fsButton)) {
+                targetElement = fsButton;
+            }
+            // Nueva regla: Desde btn-censura a fullscreen con ArrowLeft
+            else if (currentElement === censuraButton && focusableElements.includes(fsButton)) {
                 targetElement = fsButton;
             }
             else if ((currentElement === adblockButton || currentElement === censuraButton) && focusableElements.includes(firstServerButton)) targetElement = firstServerButton;
